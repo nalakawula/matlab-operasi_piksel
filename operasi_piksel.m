@@ -23,7 +23,7 @@ function varargout = operasi_piksel(varargin)
 
 % Edit the above text to modify the response to help operasi_piksel
 
-% Last Modified by GUIDE v2.5 14-May-2016 13:06:47
+% Last Modified by GUIDE v2.5 17-May-2016 04:43:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -793,3 +793,22 @@ function about_Callback(hObject, eventdata, handles)
 About
 
 
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+   konfirmasi_keluar = questdlg('Tutup aplikasi?',...
+      'Keluar',...
+      'Yes','No','Yes'); 
+   switch konfirmasi_keluar, 
+      case 'Yes',
+         delete(hObject)
+      case 'No'
+      return 
+   end
+%delete(hObject);
