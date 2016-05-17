@@ -98,24 +98,25 @@ function tombol_buka_gambar_Callback(hObject, eventdata, handles)
 % hObject    handle to tombol_buka_gambar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[namafile,direktori]=uigetfile({'*.jpg;*.tif;*.png;*.gif','All Image Files';...
-    '*.*','All Files' },'Buka Gambar');
-if isequal(namafile,0 | direktori,0)
-    return;
-end
-
-path_citra = fullfile(direktori, namafile);
-citra_asli = imread(path_citra);
-
-
-axes(handles.display_gambar_asli);
-imshow(citra_asli);
-set(handles.lokasi_gambar,'string', path_citra);
-
-info = imfinfo(path_citra);
-handles.info = info;
-handles.citra_asli = citra_asli;
-guidata(hObject,handles);
+% [namafile,direktori]=uigetfile({'*.jpg;*.tif;*.png;*.gif','All Image Files';...
+%     '*.*','All Files' },'Buka Gambar');
+% if isequal(namafile,0 | direktori,0)
+%     return;
+% end
+% 
+% path_citra = fullfile(direktori, namafile);
+% citra_asli = imread(path_citra);
+% 
+% 
+% axes(handles.display_gambar_asli);
+% imshow(citra_asli);
+% set(handles.lokasi_gambar,'string', path_citra);
+% 
+% info = imfinfo(path_citra);
+% handles.info = info;
+% handles.citra_asli = citra_asli;
+% guidata(hObject,handles);
+buka_gambar;
 
 function lokasi_gambar_Callback(hObject, eventdata, handles)
 % hObject    handle to lokasi_gambar (see GCBO)
