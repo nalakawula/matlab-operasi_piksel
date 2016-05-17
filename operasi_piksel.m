@@ -116,12 +116,12 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-
 % --- Executes on button press in tombol_buka_gambar.
 function tombol_buka_gambar_Callback(hObject, eventdata, handles)
 % hObject    handle to tombol_buka_gambar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+proyek=guidata(gcbo);
 buka_gambar;
 
 function edit2_Callback(hObject, eventdata, handles)
@@ -151,6 +151,7 @@ function tombol_simpan_Callback(hObject, eventdata, handles)
 % hObject    handle to tombol_simpan (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+proyek=guidata(gcbo);
 simpan_hasil;
 
 
@@ -163,11 +164,12 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%POP UP
+%POPUP MENU
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 contents = get(hObject,'Value')
 nama_popupmenu = get(handles.popupmenu1,'String');
 popupmenu4value = nama_popupmenu{get(handles.popupmenu1,'Value')};
+
 switch contents
     
     case 1
@@ -175,12 +177,11 @@ switch contents
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
-                
+        
         proyek=guidata(gcbo);
         citra_asli=get(proyek.display_gambar_asli,'Userdata');
-        
-        
-        
+
+               
     case 2
         %brightness
         set(handles.panel_option,'visible','on');
@@ -204,8 +205,9 @@ switch contents
         
         
         proyek=guidata(gcbo);
-        citra_asli=get(proyek.figure1,'Userdata');
-        citra_asli=get(proyek.display_gambar_asli,'Userdata');
+        citra_asli = imread(path_citra);
+%         citra_asli=get(proyek.figure1,'Userdata');
+%         citra_asli=get(proyek.display_gambar_asli,'Userdata');
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
         else
@@ -219,7 +221,7 @@ switch contents
         %thresholding
         set(handles.slider1,'visible','on');
         set(handles.nilai_slider1,'visible','on');
-        set(handles.panel_option,'visible','on');     
+        set(handles.panel_option,'visible','on');
         set(handles.pilih_kernel,'visible','off');
         
     case 6
@@ -254,7 +256,7 @@ switch contents
         set(handles.panel_option,'visible','off');
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
-        set(handles.pilih_kernel,'visible','off');        
+        set(handles.pilih_kernel,'visible','off');
         
         proyek=guidata(gcbo);
         citra_asli=get(proyek.display_gambar_asli,'Userdata');
@@ -303,7 +305,7 @@ switch contents
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','on');
         %pindah ke fungsi pilih_kernel_Callback(hObject, eventdata, handles)
-
+        
         
     case 9
         %Filter Median
@@ -381,12 +383,12 @@ switch contents
         end
         
     case 11
-         %Filter High Pass
+        %Filter High Pass
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.panel_option,'visible','off');
         set(handles.pilih_kernel,'visible','off');
-       
+        
         proyek=guidata(gcbo);
         citra_asli=get(proyek.display_gambar_asli,'Userdata');
         if isequal(citra_asli,[])
@@ -531,21 +533,21 @@ function buka_gambar_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-proyek=guidata(gcbo);
-[namafile,direktori]=uigetfile({'*.jpg';'*.bmp';'*.png';'*.tif';'*.*'},'Buka Gambar')
-if isequal(namafile,0)
-    return;
-end
-eval(['cd ''' direktori ''';']);
-citra_asli=imread(namafile);
-set(proyek.figure1,'CurrentAxes',proyek.display_gambar_asli);
-set(imshow(citra_asli));
-imshow(citra_asli);
-set(proyek.figure1,'Userdata',citra_asli);
-set(proyek.display_gambar_asli,'Userdata',citra_asli);
-info=imfinfo(namafile);
-set(handles.lokasi_gambar,'string', info.Filename);
-
+% proyek=guidata(gcbo);
+% [namafile,direktori]=uigetfile({'*.jpg';'*.bmp';'*.png';'*.tif';'*.*'},'Buka Gambar')
+% if isequal(namafile,0)
+%     return;
+% end
+% eval(['cd ''' direktori ''';']);
+% citra_asli=imread(namafile);
+% set(proyek.figure1,'CurrentAxes',proyek.display_gambar_asli);
+% set(imshow(citra_asli));
+% imshow(citra_asli);
+% set(proyek.figure1,'Userdata',citra_asli);
+% set(proyek.display_gambar_asli,'Userdata',citra_asli);
+% info=imfinfo(namafile);
+% set(handles.lokasi_gambar,'string', info.Filename);
+buka_gambar;
 
 % --------------------------------------------------------------------
 function simpan_Callback(hObject, eventdata, handles)
@@ -553,14 +555,14 @@ function simpan_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-proyek=guidata(gcbo);
-citra_hasil=get(proyek.figure1,'Userdata');
-citra_hasil=get(proyek.display_gambar_hasil,'Userdata');
-[filename, foldername] = uiputfile({'*.jpg;*.tif;*.png;*.gif','All Image Files';...
-    '*.*','All Files' },'Save Image');
-complete_name = fullfile(foldername, filename);
-imwrite(citra_hasil, complete_name);
-
+% proyek=guidata(gcbo);
+% citra_hasil=get(proyek.figure1,'Userdata');
+% citra_hasil=get(proyek.display_gambar_hasil,'Userdata');
+% [filename, foldername] = uiputfile({'*.jpg;*.tif;*.png;*.gif','All Image Files';...
+%     '*.*','All Files' },'Save Image');
+% complete_name = fullfile(foldername, filename);
+% imwrite(citra_hasil, complete_name);
+simpan_hasil;
 % --------------------------------------------------------------------
 function tutup_Callback(hObject, eventdata, handles)
 % hObject    handle to tutup (see GCBO)
@@ -591,6 +593,8 @@ function slider1_Callback(hObject, eventdata, handles)
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 proyek=guidata(gcbo);
 citra_asli=get(proyek.display_gambar_asli,'Userdata');
+% path_citra = get(handles.path_citra);
+% citra_asli = imread(path_citra);
 
 handles.nilai= get(handles.slider1,'Value');
 
