@@ -1,15 +1,22 @@
-proyek=guidata(gcbo);
 [namafile,direktori]=uigetfile({'*.jpg;*.tif;*.png;*.gif','All Image Files';...
-    '*.*','All Files' },'Buka Gambar')
-if isequal(namafile,0)
+    '*.*','All Files' },'Buka Gambar');
+if isequal(namafile,0 | direktori,0)
     return;
 end
-eval(['cd ''' direktori ''';']);
-citra_asli=imread(namafile);
-set(proyek.figure1,'CurrentAxes',proyek.display_gambar_asli);
-set(imshow(citra_asli));
+
+path_citra = fullfile(direktori, namafile);
+citra_asli = imread(path_citra);
+
+
+axes(handles.display_gambar_asli);
 imshow(citra_asli);
-set(proyek.figure1,'Userdata',citra_asli);
-set(proyek.display_gambar_asli,'Userdata',citra_asli);
-info=imfinfo(namafile);
-set(handles.lokasi_gambar,'string', info.Filename);
+set(handles.lokasi_gambar,'string', path_citra);
+
+info = imfinfo(path_citra);
+handles.info = info;
+handles.citra_asli = citra_asli;
+guidata(hObject,handles);
+
+% info = imfinfo(path_citra);
+% color_type = info.ColorType
+% bit_depth = info.BitDepth
