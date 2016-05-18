@@ -60,7 +60,10 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 %sumar
+%selalu ditengah ketika start
+movegui(gcf,'center')
 set(handles.figure1, 'units', 'normalized', 'position', [0.05 0.15 0.9 0.8])
+%splash
 s = SplashScreen( 'operasi_piksel', 'splash_sumar.png', ...
     'ProgressBar', 'on', ...
     'ProgressPosition', 5, ...
