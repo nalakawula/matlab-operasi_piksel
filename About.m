@@ -58,6 +58,9 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+%selalu ditengah ketika start
+movegui(gcf,'center')
+
 % UIWAIT makes About wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
