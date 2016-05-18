@@ -597,17 +597,12 @@ else
             guidata(hObject,handles);
             
         case 'Kontras'
-            %%%%coba algoritma contrast stretching%%%%
             e=3;
             m=handles.nilai;
             citra_input = double(citra_asli);
             citra_hasil = 1./(1+(m./citra_input).^e);
             citra_hasil = im2uint8(mat2gray(citra_hasil));
-            %%%%%%%%%%            
             
-            %citra_hasil = citra_asli*handles.nilai;
-            %handles.nilai = handles.nilai/255;
-            %citra_hasil = imadjust(citra_asli,[0 handles.nilai],[0 1]);
             axes(handles.display_gambar_hasil);
             imshow(citra_hasil);
             handles.citra_hasil = citra_hasil;
