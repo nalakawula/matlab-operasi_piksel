@@ -64,7 +64,7 @@ set(handles.figure1, 'units', 'normalized', 'position', [0.05 0.15 0.9 0.8])
 s = SplashScreen( 'operasi_piksel', 'splash_sumar.png', ...
     'ProgressBar', 'on', ...
     'ProgressPosition', 5, ...
-    'ProgressRatio', 0.8)
+    'ProgressRatio', 0.8);
 % s.addText( 300, 50, 'OPERASI PIKSEL', 'FontSize', 30, 'FontWeight', 'bold', 'Color', 'white' )
 % s.addText( 30, 270, 'Sumarsono', 'FontSize', 15, 'FontWeight', 'bold', 'Color', 'white' )
 % s.addText( 30, 290, 'Cahyo Fajar Adhiningtyas',  'FontWeight', 'bold', 'FontSize', 15, 'Color', 'white' )
@@ -376,11 +376,11 @@ switch contents
                 
                 J=A1.*Lo;
                 J1=ifftshift(J);
-                B1=ifft2(J1);
+                hasil_lowpass=ifft2(J1);
                 
                 K=A1.*Hi;
                 K1=ifftshift(K);
-                B2=ifft2(K1);
+                hasil_highpass=ifft2(K1);
                 
             else
                 I=rgb2gray(citra_asli);
@@ -404,18 +404,18 @@ switch contents
                 
                 J=A1.*Lo;
                 J1=ifftshift(J);
-                B1=ifft2(J1);
+                hasil_lowpass=ifft2(J1);
                 
                 K=A1.*Hi;
                 K1=ifftshift(K);
-                B2=ifft2(K1);
+                hasil_highpass=ifft2(K1);
                 
            
             end
 
             axes(handles.display_gambar_hasil);
             %imshow(citra_hasil)
-            imshow(abs(B1),[12 290]), colormap gray;
+            imshow(abs(hasil_lowpass),[12 290]), colormap gray;
             F = getframe(handles.display_gambar_hasil);
             citra_hasil = F.cdata;
             %citra_hasil = 
@@ -670,7 +670,7 @@ function pilih_kernel_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pilih_kernel contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pilih_kernel
-contents = get(hObject,'Value')
+contents = get(hObject,'Value');
 citra_asli = handles.citra_asli;
 switch contents
     case 1
