@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    %SplashScreen  create a splashscreen
->>>>>>> refs/remotes/origin/master
-=======
->>>>>>> master
 classdef SplashScreen < hgsetget
     %SplashScreen  create a splashscreen
     %
