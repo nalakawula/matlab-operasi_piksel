@@ -200,11 +200,39 @@ switch contents
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
         else
-            citra_hasil = ~(im2bw(citra_asli));
-            axes(handles.display_gambar_hasil);
-            imshow(citra_hasil);
-            handles.citra_hasil = citra_hasil;
-            guidata(hObject,handles);
+%             citra_hasil = ~(im2bw(citra_asli));
+%             axes(handles.display_gambar_hasil);
+%             imshow(citra_hasil);
+%             handles.citra_hasil = citra_hasil;
+%             guidata(hObject,handles);
+
+        BitDepth = handles.info.BitDepth;
+            if BitDepth==8 %untuk grayscale image
+                uk          = size(citra_asli);
+                pxl         = uk(1)*uk(2);
+                suG         = sum(sum(citra_asli));
+                Rat         = suG/pxl; prc=Rat/240;
+                invk        = ~(im2bw(citra_asli,prc));
+                citra_hasil = invk;
+%                 citra_hasil = ~(im2bw(citra_asli));
+                axes(handles.display_gambar_hasil);
+                imshow(citra_hasil);
+                handles.citra_hasil = citra_hasil;
+                guidata(hObject,handles);
+                
+            else %untuk color image
+                uk          = size(citra_asli);
+                pxl         = uk(1)*uk(2);
+                Kam         = rgb2gray(citra_asli);
+                suG         = sum(sum(Kam));
+                Rat         = suG/pxl; prc=Rat/255;
+                invk        = ~(im2bw(Kam,prc));
+                citra_hasil = invk;
+                axes(handles.display_gambar_hasil);
+                imshow(citra_hasil);
+                handles.citra_hasil = citra_hasil;
+                guidata(hObject,handles);
+            end
         end
         
     case 5
@@ -221,23 +249,48 @@ switch contents
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
         
-        figure;
+        %figure; %ga kepake
         BitDepth = handles.info.BitDepth;
         
         if BitDepth==8
-            subplot(1,1,1);
-            imhist(citra_asli(:,:,1));
-            title('Histogram Intensitas Warna Grayscale');
+            %subplot(1,1,1);
+            %imhist(citra_asli(:,:,1));
+            %title('Histogram Intensitas Warna Grayscale');
+            out             = hist_eq(citra_asli);
+            
+            citra_hasil     = out;
+            
+            axes(handles.display_gambar_hasil);
+            imshow(citra_hasil);
+            handles.citra_hasil = citra_hasil;
+            guidata(hObject,handles);
+        
         else
-            subplot(3,1,1);
-            imhist(citra_asli(:,:,1));
-            title('Histogram Intensitas Warna Merah(R)');
-            subplot(3,1,2);
-            imhist(citra_asli(:,:,2));
-            title('Histogram Intensitas Warna Hijau(G)');
-            subplot(3,1,3);
-            imhist(citra_asli(:,:,3));
-            title('Histogram Intensitas Warna Biru(B)');
+            %subplot(3,1,1);
+            %imhist(citra_asli(:,:,1));
+            %title('Histogram Intensitas Warna Merah(R)');
+            %subplot(3,1,2);
+            %imhist(citra_asli(:,:,2));
+            %title('Histogram Intensitas Warna Hijau(G)');
+            %subplot(3,1,3);
+            %imhist(citra_asli(:,:,3));
+            %title('Histogram Intensitas Warna Biru(B)');
+            HSV             = rgb2hsv(citra_asli);
+            
+            Heq             = histeq(HSV(:,:,3));
+            
+            HSV_mod         = HSV;
+            HSV_mod(:,:,3)  = Heq;
+            
+            RGB             = hsv2rgb(HSV_mod);
+            
+            citra_hasil     = RGB;
+            
+            axes(handles.display_gambar_hasil);
+            imshow(citra_hasil);
+            handles.citra_hasil = citra_hasil;
+            guidata(hObject,handles);
+
         end
         
     case 7
