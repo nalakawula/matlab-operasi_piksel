@@ -173,7 +173,6 @@ switch contents
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
         axes(handles.display_gambar_hasil);
-        set(handles.slider1,'Value',0)
         imshow([]);
         
     case 2
@@ -182,14 +181,13 @@ switch contents
         set(handles.slider1,'visible','on');
         set(handles.nilai_slider1,'visible','on');
         set(handles.pilih_kernel,'visible','off');
-        set(handles.slider1,'Value',0)
+        
     case 3
         %kontras
         set(handles.panel_option,'visible','on');
         set(handles.slider1,'visible','on');
         set(handles.nilai_slider1,'visible','on');
         set(handles.pilih_kernel,'visible','off');
-        set(handles.slider1,'Value',0)
         
     case 4
         %invers
@@ -243,7 +241,6 @@ switch contents
         set(handles.nilai_slider1,'visible','on');
         set(handles.panel_option,'visible','on');
         set(handles.pilih_kernel,'visible','off');
-        set(handles.slider1,'Value',0)
         
     case 6
         %Ekualisasi Histogram
