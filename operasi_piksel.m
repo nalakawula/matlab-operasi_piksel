@@ -508,6 +508,7 @@ switch contents
         
     case 13
         %level cliping
+        %lutfiyanaa
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.panel_option,'visible','off');
