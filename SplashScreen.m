@@ -1,4 +1,3 @@
-    %SplashScreen  create a splashscreen
 classdef SplashScreen < hgsetget
     %SplashScreen  create a splashscreen
     %
