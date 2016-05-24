@@ -23,7 +23,7 @@ function varargout = operasi_piksel(varargin)
 
 % Edit the above text to modify the response to help operasi_piksel
 
-% Last Modified by GUIDE v2.5 18-May-2016 14:12:04
+% Last Modified by GUIDE v2.5 24-May-2016 14:05:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -101,24 +101,6 @@ function tombol_buka_gambar_Callback(hObject, eventdata, handles)
 % hObject    handle to tombol_buka_gambar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% [namafile,direktori]=uigetfile({'*.jpg;*.tif;*.png;*.gif','All Image Files';...
-%     '*.*','All Files' },'Buka Gambar');
-% if isequal(namafile,0 | direktori,0)
-%     return;
-% end
-% 
-% path_citra = fullfile(direktori, namafile);
-% citra_asli = imread(path_citra);
-% 
-% 
-% axes(handles.display_gambar_asli);
-% imshow(citra_asli);
-% set(handles.lokasi_gambar,'string', path_citra);
-% 
-% info = imfinfo(path_citra);
-% handles.info = info;
-% handles.citra_asli = citra_asli;
-% guidata(hObject,handles);
 buka_gambar;
 
 function lokasi_gambar_Callback(hObject, eventdata, handles)
@@ -145,7 +127,6 @@ function tombol_simpan_Callback(hObject, eventdata, handles)
 % hObject    handle to tombol_simpan (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%proyek=guidata(gcbo);
 simpan_hasil;
 
 % --- Executes on selection change in popupmenu1.
@@ -173,6 +154,7 @@ switch contents
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
         axes(handles.display_gambar_hasil);
+        set(handles.slider1,'Value',0)
         imshow([]);
         
     case 2
@@ -180,14 +162,29 @@ switch contents
         set(handles.panel_option,'visible','on');
         set(handles.slider1,'visible','on');
         set(handles.nilai_slider1,'visible','on');
+        
         set(handles.pilih_kernel,'visible','off');
+        set(handles.pilih_metode,'visible','off');    
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        
+        set(handles.slider1,'Value',0)
         
     case 3
         %kontras
         set(handles.panel_option,'visible','on');
         set(handles.slider1,'visible','on');
         set(handles.nilai_slider1,'visible','on');
+        
         set(handles.pilih_kernel,'visible','off');
+        set(handles.pilih_metode,'visible','off');
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        set(handles.slider1,'Value',0)
         
     case 4
         %invers
@@ -195,18 +192,14 @@ switch contents
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
-        
-        
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
         else
-%             citra_hasil = ~(im2bw(citra_asli));
-%             axes(handles.display_gambar_hasil);
-%             imshow(citra_hasil);
-%             handles.citra_hasil = citra_hasil;
-%             guidata(hObject,handles);
-
-        BitDepth = handles.info.BitDepth;
+            BitDepth = handles.info.BitDepth;
             if BitDepth==8 %untuk grayscale image
                 uk          = size(citra_asli);
                 pxl         = uk(1)*uk(2);
@@ -214,7 +207,6 @@ switch contents
                 Rat         = suG/pxl; prc=Rat/240;
                 invk        = ~(im2bw(citra_asli,prc));
                 citra_hasil = invk;
-%                 citra_hasil = ~(im2bw(citra_asli));
                 axes(handles.display_gambar_hasil);
                 imshow(citra_hasil);
                 handles.citra_hasil = citra_hasil;
@@ -237,10 +229,20 @@ switch contents
         
     case 5
         %thresholding
-        set(handles.slider1,'visible','on');
-        set(handles.nilai_slider1,'visible','on');
-        set(handles.panel_option,'visible','on');
+        set(handles.slider1,'visible','off');
+        set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
+        
+        set(handles.panel_option,'visible','on');
+        set(handles.pilih_metode,'visible','on');
+        
+        set(handles.slider1,'Value',0)
+        %loncat ke fungsi pilih_metode_Callback(hObject, eventdata, handles)
+        
         
     case 6
         %Ekualisasi Histogram
@@ -248,14 +250,14 @@ switch contents
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
         
-        %figure; %ga kepake
         BitDepth = handles.info.BitDepth;
         
         if BitDepth==8
-            %subplot(1,1,1);
-            %imhist(citra_asli(:,:,1));
-            %title('Histogram Intensitas Warna Grayscale');
             out             = histeq(citra_asli);
             
             citra_hasil     = out;
@@ -264,33 +266,20 @@ switch contents
             imshow(citra_hasil);
             handles.citra_hasil = citra_hasil;
             guidata(hObject,handles);
-        
+            
         else
-            %subplot(3,1,1);
-            %imhist(citra_asli(:,:,1));
-            %title('Histogram Intensitas Warna Merah(R)');
-            %subplot(3,1,2);
-            %imhist(citra_asli(:,:,2));
-            %title('Histogram Intensitas Warna Hijau(G)');
-            %subplot(3,1,3);
-            %imhist(citra_asli(:,:,3));
-            %title('Histogram Intensitas Warna Biru(B)');
             HSV             = rgb2hsv(citra_asli);
-            
             Heq             = histeq(HSV(:,:,3));
-            
             HSV_mod         = HSV;
             HSV_mod(:,:,3)  = Heq;
-            
             RGB             = hsv2rgb(HSV_mod);
-            
             citra_hasil     = RGB;
             
             axes(handles.display_gambar_hasil);
             imshow(citra_hasil);
             handles.citra_hasil = citra_hasil;
             guidata(hObject,handles);
-
+            
         end
         
     case 7
@@ -299,6 +288,11 @@ switch contents
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.pilih_kernel,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
         
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
@@ -340,20 +334,30 @@ switch contents
         end
         
     case 8
-        %Filter Rerata
-        set(handles.panel_option,'visible','on');
+        %Filter Rerata        
         set(handles.slider1,'visible','off');
-        set(handles.nilai_slider1,'visible','off');
+        set(handles.nilai_slider1,'visible','off');        
+        set(handles.pilih_metode,'visible','off');
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        
+        set(handles.panel_option,'visible','on');
         set(handles.pilih_kernel,'visible','on');
         %loncat ke fungsi pilih_kernel_Callback(hObject, eventdata, handles)
-        
-        
+
     case 9
         %Filter Median
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.panel_option,'visible','off');
         set(handles.pilih_kernel,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
         
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
@@ -402,8 +406,10 @@ switch contents
         set(handles.nilai_slider1,'visible','off');
         set(handles.panel_option,'visible','off');
         set(handles.pilih_kernel,'visible','off');
-        
-        
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
         
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
@@ -466,31 +472,15 @@ switch contents
                 K1=ifftshift(K);
                 hasil_highpass=ifft2(K1);
                 
-           
+                
             end
-
+            
             axes(handles.display_gambar_hasil);
-            %imshow(citra_hasil)
             imshow(abs(hasil_lowpass),[12 290]), colormap gray;
             F = getframe(handles.display_gambar_hasil);
             citra_hasil = F.cdata;
-            %citra_hasil = 
             handles.citra_hasil = citra_hasil;
             guidata(hObject,handles);
-            
-            
-%             %             J=rgb2gray(citra_asli);
-%             h= fspecial('gaussian',[3 3],0.5);
-%             L=imfilter(citra_asli,h);
-%             k= [1 1 1;
-%                 1 1 1;
-%                 1 1 1]/9;
-%             %             citra_hasil=imfilter(J,k);
-%             citra_hasil = imfilter(citra_asli,h);
-%             axes(handles.display_gambar_hasil);
-%             imshow(citra_hasil);
-%             handles.citra_hasil = citra_hasil;
-%             guidata(hObject,handles);
         end
         
     case 11
@@ -498,7 +488,11 @@ switch contents
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
         set(handles.panel_option,'visible','off');
-        set(handles.pilih_kernel,'visible','off');
+        set(handles.pilih_kernel,'visible','off');        
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
         
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
@@ -532,6 +526,10 @@ switch contents
         set(handles.nilai_slider1,'visible','off');
         set(handles.panel_option,'visible','off');
         set(handles.pilih_kernel,'visible','off');
+        set(handles.slider_min,'visible','off');
+        set(handles.slider_max,'visible','off');
+        set(handles.nilai_slider_min,'visible','off');
+        set(handles.nilai_slider_max,'visible','off');
         
         if isequal(citra_asli,[])
             msgbox('Belum ada gambar!');
@@ -564,49 +562,57 @@ switch contents
         %lutfiyanaa
         set(handles.slider1,'visible','off');
         set(handles.nilai_slider1,'visible','off');
-        set(handles.panel_option,'visible','off');
+        set(handles.panel_option,'visible','on');
         set(handles.pilih_kernel,'visible','off');
+        set(handles.pilih_metode,'visible','off');
         
-        if isequal(citra_asli,[])
-            msgbox('Belum ada gambar!');
-        else
-            BitDepth = handles.info.BitDepth;
-            
-            if BitDepth == 8
-                citra_gray = citra_asli;
-                [tinggi, lebar] = size(citra_gray);
-                for baris=1 : tinggi
-                    for kolom=1 : lebar
-                        if citra_gray(baris, kolom) <= 70
-                            citra_gray(baris, kolom) = 0;
-                        end
-                        if citra_gray(baris, kolom) >= 120
-                            citra_gray(baris, kolom) = 255;
-                        end
-                    end
-                end
-            else
-                citra_gray=rgb2gray(citra_asli);
-                [tinggi, lebar] = size(citra_gray);
-                for baris=1 : tinggi
-                    for kolom=1 : lebar
-                        if citra_gray(baris, kolom) <= 70
-                            citra_gray(baris, kolom) = 0;
-                        end
-                        if citra_gray(baris, kolom) >= 120
-                            citra_gray(baris, kolom) = 255;
-                        end
-                    end
-                end
-            end
-            citra_hasil = citra_gray;
-            axes(handles.display_gambar_hasil);
-            imshow(citra_hasil);
-            handles.citra_hasil = citra_hasil;
-            guidata(hObject,handles);
-        end
+        set(handles.slider_min,'value', 0);
+        set(handles.slider_max,'value', 255);
         
-    otherwise
+        set(handles.nilai_slider_min,'visible','on');
+        set(handles.nilai_slider_max,'visible','on');
+        set(handles.slider_min,'visible','on');
+        set(handles.slider_max,'visible','on');
+%         if isequal(citra_asli,[])
+%             msgbox('Belum ada gambar!');
+%         else
+%             BitDepth = handles.info.BitDepth;
+%             
+%             if BitDepth == 8
+%                 citra_gray = citra_asli;
+%                 [tinggi, lebar] = size(citra_gray);
+%                 for baris=1 : tinggi
+%                     for kolom=1 : lebar
+%                         if citra_gray(baris, kolom) <= 70
+%                             citra_gray(baris, kolom) = 0;
+%                         end
+%                         if citra_gray(baris, kolom) >= 120
+%                             citra_gray(baris, kolom) = 255;
+%                         end
+%                     end
+%                 end
+%             else
+%                 citra_gray=rgb2gray(citra_asli);
+%                 [tinggi, lebar] = size(citra_gray);
+%                 for baris=1 : tinggi
+%                     for kolom=1 : lebar
+%                         if citra_gray(baris, kolom) <= 70
+%                             citra_gray(baris, kolom) = 0;
+%                         end
+%                         if citra_gray(baris, kolom) >= 120
+%                             citra_gray(baris, kolom) = 255;
+%                         end
+%                     end
+%                 end
+%             end
+%             citra_hasil = citra_gray;
+%             axes(handles.display_gambar_hasil);
+%             imshow(citra_hasil);
+%             handles.citra_hasil = citra_hasil;
+%             guidata(hObject,handles);
+%         end
+%         
+%     otherwise
 end
 
 
@@ -640,6 +646,9 @@ handles.nilai= get(handles.slider1,'Value');
 nama_popupmenu = get(handles.popupmenu1,'String');
 popupmenu1value = nama_popupmenu{get(handles.popupmenu1,'Value')};
 
+nama_metodethreshold = get(handles.pilih_metode,'String');
+value_pilihmetode = nama_metodethreshold{get(handles.pilih_metode,'Value')};
+
 if isequal(citra_asli,[])
     msgbox('Belum ada gambar!');
 else
@@ -665,8 +674,10 @@ else
             handles.citra_hasil = citra_hasil;
             set(handles.nilai_slider1,'string', handles.nilai);
             guidata(hObject,handles);
-            
-        case 'Thresholding'
+    end
+    
+    switch value_pilihmetode
+        case 'local'
             if isequal(citra_asli,[])
                 msgbox('Belum ada gambar!');
             else
@@ -867,3 +878,266 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %EOF
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% --- Executes on selection change in pilih_metode.
+function pilih_metode_Callback(hObject, eventdata, handles)
+% hObject    handle to pilih_metode (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns pilih_metode contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from pilih_metode
+metode_threshold = get(hObject,'Value');
+citra_asli = handles.citra_asli;
+switch metode_threshold
+    case 1
+        
+        axes(handles.display_gambar_hasil);
+        imshow([]);
+        guidata(hObject,handles);
+        
+    case 2 %thresholding local
+        
+        set(handles.slider1,'visible','on');
+        set(handles.nilai_slider1,'visible','on');
+        set(handles.panel_option,'visible','on');
+        set(handles.pilih_kernel,'visible','off');
+        set(handles.slider1,'Value',0)
+        
+    case 3 %thresholding global
+        set(handles.slider1,'visible','off');
+        set(handles.nilai_slider1,'visible','off');
+        set(handles.panel_option,'visible','on');
+        set(handles.pilih_kernel,'visible','off');
+        set(handles.slider1,'Value',0)
+        
+        level = graythresh(citra_asli);
+        %level = handles.nilai/255;
+        set(handles.nilai_slider1,'string', level);
+        citra_hasil = im2bw(citra_asli,level);
+
+        axes(handles.display_gambar_hasil);
+        imshow(citra_hasil);
+        handles.citra_hasil = citra_hasil;
+        guidata(hObject,handles);
+
+end
+
+% --- Executes during object creation, after setting all properties.
+function pilih_metode_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to pilih_metode (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on slider movement.
+function slider_min_Callback(hObject, eventdata, handles)
+% hObject    handle to slider_min (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+citra_asli = handles.citra_asli;
+handles.min = get(handles.slider_min,'Value');
+handles.max = get(handles.slider_max,'Value');
+
+set(handles.nilai_slider_min,'string', handles.min);
+set(handles.nilai_slider_max,'string', handles.max);
+
+nama_popupmenu1 = get(handles.popupmenu1,'String');
+popupmenu2value = nama_popupmenu1{get(handles.popupmenu1,'Value')};
+ 
+if isequal(citra_asli,[])
+    msgbox('Belum ada gambar!');
+else
+    switch popupmenu2value
+        
+        case 'Level Clipping'
+             if isequal(citra_asli,[])
+            msgbox('Belum ada gambar!');
+        else
+            BitDepth = handles.info.BitDepth;
+            
+            if BitDepth == 8
+                citra_gray = citra_asli;
+                [tinggi, lebar] = size(citra_gray);
+                for baris=1 : tinggi
+                    for kolom=1 : lebar
+                        if citra_gray(baris, kolom) <= handles.min
+                            citra_gray(baris, kolom) = 0;
+                        end
+                        if citra_gray(baris, kolom) >= handles.max
+                            citra_gray(baris, kolom) = 255;
+                        end
+                    end
+                end
+            else
+                citra_gray=rgb2gray(citra_asli);
+                [tinggi, lebar] = size(citra_gray);
+                for baris=1 : tinggi
+                    for kolom=1 : lebar
+                        if citra_gray(baris, kolom) <= handles.min
+                            citra_gray(baris, kolom) = 0;
+                        end
+                        if citra_gray(baris, kolom) >= handles.max
+                            citra_gray(baris, kolom) = 255;
+                        end
+                    end
+                end
+            end
+            citra_hasil = citra_gray;
+            axes(handles.display_gambar_hasil);
+            imshow(citra_hasil);
+            handles.citra_hasil = citra_hasil;
+            guidata(hObject,handles);
+        end
+         
+       otherwise
+   end
+end
+ guidata(hObject,handles);
+
+% --- Executes during object creation, after setting all properties.
+function slider_min_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider_min (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+% --- Executes on slider movement.
+function slider_max_Callback(hObject, eventdata, handles)
+% hObject    handle to slider_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+citra_asli = handles.citra_asli;
+handles.max = get(handles.slider_max,'Value');
+handles.min = get(handles.slider_min,'Value');
+
+
+set(handles.nilai_slider_min,'string', handles.min);
+set(handles.nilai_slider_max,'string', handles.max);
+
+nama_popupmenu1 = get(handles.popupmenu1,'String');
+popupmenu2value = nama_popupmenu1{get(handles.popupmenu1,'Value')};
+
+if isequal(citra_asli,[])
+    msgbox('Belum ada gambar!');
+else
+    switch popupmenu2value
+        
+        case 'Level Clipping'
+             if isequal(citra_asli,[])
+            msgbox('Belum ada gambar!');
+        else
+            BitDepth = handles.info.BitDepth;
+            
+            if BitDepth == 8
+                citra_gray = citra_asli;
+                [tinggi, lebar] = size(citra_gray);
+                for baris=1 : tinggi
+                    for kolom=1 : lebar
+                        if citra_gray(baris, kolom) <= handles.min
+                            citra_gray(baris, kolom) = 0;
+                        end
+                        if citra_gray(baris, kolom) >= handles.max
+                            citra_gray(baris, kolom) = 255;
+                        end
+                    end
+                end
+            else
+                citra_gray=rgb2gray(citra_asli);
+                [tinggi, lebar] = size(citra_gray);
+                for baris=1 : tinggi
+                    for kolom=1 : lebar
+                        if citra_gray(baris, kolom) <= handles.min
+                            citra_gray(baris, kolom) = 0;
+                        end
+                        if citra_gray(baris, kolom) >= handles.max
+                            citra_gray(baris, kolom) = 255;
+                        end
+                    end
+                end
+            end
+            citra_hasil = citra_gray;
+            axes(handles.display_gambar_hasil);
+            imshow(citra_hasil);
+            handles.citra_hasil = citra_hasil;
+            guidata(hObject,handles);
+        end
+         
+       otherwise
+   end
+end
+ guidata(hObject,handles);
+% --- Executes during object creation, after setting all properties.
+function slider_max_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
+
+
+
+function nilai_slider_max_Callback(hObject, eventdata, handles)
+% hObject    handle to nilai_slider_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of nilai_slider_max as text
+%        str2double(get(hObject,'String')) returns contents of nilai_slider_max as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function nilai_slider_max_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to nilai_slider_max (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function nilai_slider_min_Callback(hObject, eventdata, handles)
+% hObject    handle to nilai_slider_min (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of nilai_slider_min as text
+%        str2double(get(hObject,'String')) returns contents of nilai_slider_min as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function nilai_slider_min_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to nilai_slider_min (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
