@@ -15,6 +15,7 @@ set(handles.lokasi_gambar,'string', path_citra);
 info = imfinfo(path_citra);
 handles.info = info;
 handles.citra_asli = citra_asli;
+set(handles.popupmenu1,'Value',1)
 guidata(hObject,handles);
 
 % info = imfinfo(path_citra);
