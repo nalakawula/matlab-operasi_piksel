@@ -149,6 +149,7 @@ citra_asli = handles.citra_asli;
 switch contents
     
     case 1
+        %menu pilih operasi
         set(handles.panel_option,'visible','off');
         set(handles.slider1,'Value',0);
         axes(handles.display_gambar_hasil);
@@ -752,6 +753,7 @@ function buka_gambar_Callback(hObject, eventdata, handles)
 % hObject    handle to buka_gambar (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%fungsi untuk load gambar
 buka_gambar;
 
 % --------------------------------------------------------------------
@@ -773,10 +775,7 @@ switch lower(respon)
         close
 end
 
-% --------------------------------------------------------------------
 
-
-% --------------------------------------------------------------------
 function bantuan_Callback(hObject, eventdata, handles)
 % hObject    handle to bantuan (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -788,7 +787,7 @@ function about_Callback(hObject, eventdata, handles)
 % hObject    handle to about (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-About
+About;
 
 
 
